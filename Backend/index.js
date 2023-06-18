@@ -18,6 +18,13 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const apiProxy = createProxyMiddleware({
+  target: 'https://movie-app-tmdb-api-production-407d.up.railway.app', // Replace with your API base URL
+  changeOrigin: true,
+});
+
+app.use("/api", apiProxy);
+
 const connect = async () => {
   try {
     await mongoose.connect(process.env.MONGO_DB);

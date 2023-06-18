@@ -5,6 +5,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import { errorHandler } from "./middleware/errorHandler.js";
+import { createProxyMiddleware } from "http-proxy-middleware";
 
 const app = express();
 dotenv.config();

@@ -5,26 +5,17 @@ import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import { errorHandler } from "./middleware/errorHandler.js";
-import { createProxyMiddleware } from "http-proxy-middleware";
 
 const app = express();
 dotenv.config();
-app.use(
-  cors({
-    origin: "*",
-    optionsSuccessStatus: 200,
-    credentials: true,
-  })
-);
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const apiProxy = createProxyMiddleware({
-  target: 'https://movie-app-tmdb-api-production-407d.up.railway.app', // Replace with your API base URL
-  changeOrigin: true,
-});
-
-app.use("/api", apiProxy);
+var corsOptions = {
+  origin: "https://layar-tancep.netlify.app/",
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
 
 const connect = async () => {
   try {
@@ -41,8 +32,8 @@ mongoose.connection.on("connected", () => {
   console.log("mongoDB connected!!");
 });
 
-app.use("/", userRouter);
-app.use("/", movieRouter);
+app.use("/", cors(corsOptions), userRouter);
+app.use("/", cors(corsOptions), movieRouter);
 
 app.use(errorHandler);
 
